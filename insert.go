@@ -1,0 +1,23 @@
+package mongorm
+
+import (
+	"context"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+func (c *C[T]) Insert(options ...*options.InsertOneOptions) (result *mongo.InsertOneResult, err error) {
+	var i T
+	result, err = c.db.Collection(i.Name()).InsertOne(context.Background(), c, options...)
+	return
+}
+
+func (c C[T]) InsertMany(documents []T, options ...*options.InsertManyOptions) (result *mongo.InsertManyResult, err error) {
+	var interfaces []interface{}
+	for _, document := range documents {
+		interfaces = append(interfaces, document)
+	}
+	var i T
+	result, err = c.db.Collection(i.Name()).InsertMany(context.Background(), interfaces, options...)
+	return
+}

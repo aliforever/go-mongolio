@@ -20,13 +20,21 @@ func main() {
 
 	db := client.Database("mydb")
 
-	usersCollection := mongorm.Collection[User](db)
+	Users = mongorm.Collection[User](db)
+	Accounts = mongorm.Collection[Account](db)
 
-	user, err := usersCollection.FindOne(bson.M{"first_name": "Ali"})
+	user, err := Users.FindOne(bson.M{"first_name": "Ali"})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	account, err := Accounts.FindOne(bson.M{"username": "admin"})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	fmt.Printf("%#v\n", user)
+	fmt.Printf("%#v\n", account)
 }

@@ -9,7 +9,7 @@ import (
 
 func (c *C[T]) FindOne(m bson.M, options ...*options.FindOneOptions) (result *T, err error) {
 	var i T
-	err = c.db.Collection(i._CollectionName()).FindOne(context.Background(), m, options...).Decode(&result)
+	err = c.db.Collection(i.CollectionName()).FindOne(context.Background(), m, options...).Decode(&result)
 	return
 }
 
@@ -18,7 +18,7 @@ func (c *C[T]) Find(m bson.M, options ...*options.FindOptions) (result []T, err 
 		i      T
 		cursor *mongo.Cursor
 	)
-	cursor, err = c.db.Collection(i._CollectionName()).Find(context.Background(), m, options...)
+	cursor, err = c.db.Collection(i.CollectionName()).Find(context.Background(), m, options...)
 	if err != nil {
 		return
 	}

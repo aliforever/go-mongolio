@@ -10,13 +10,13 @@ import (
 
 func (c *C[T]) Update(id primitive.ObjectID, document *T, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
 	var i T
-	result, err = c.db.Collection(i._CollectionName()).UpdateByID(context.Background(), id, document, options...)
+	result, err = c.db.Collection(i.CollectionName()).UpdateByID(context.Background(), id, document, options...)
 	return
 }
 
 func (c *C[T]) UpdateCustom(filter, data bson.M, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
 	var i T
-	result, err = c.db.Collection(i._CollectionName()).UpdateOne(context.Background(), filter, bson.M{
+	result, err = c.db.Collection(i.CollectionName()).UpdateOne(context.Background(), filter, bson.M{
 		"$set": data,
 	}, options...)
 	return
@@ -24,7 +24,7 @@ func (c *C[T]) UpdateCustom(filter, data bson.M, options ...*options.UpdateOptio
 
 func (c *C[T]) UpdateCustomMany(filter, data bson.M, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
 	var i T
-	result, err = c.db.Collection(i._CollectionName()).UpdateMany(context.Background(), filter, bson.M{
+	result, err = c.db.Collection(i.CollectionName()).UpdateMany(context.Background(), filter, bson.M{
 		"$set": data,
 	}, options...)
 	return

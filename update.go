@@ -8,9 +8,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (c *C[T]) Update(id primitive.ObjectID, document *T, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
+func (c *C[T]) UpdateByID(id primitive.ObjectID, document *T, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
 	var i T
-	result, err = c.db.Collection(i.CollectionName()).UpdateByID(context.Background(), id, document, options...)
+	result, err = c.db.Collection(i.CollectionName()).UpdateByID(context.Background(), id, bson.M{"$set": document}, options...)
 	return
 }
 

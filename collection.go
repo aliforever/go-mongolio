@@ -5,7 +5,7 @@ import (
 )
 
 type col interface {
-	_CollectionName() string
+	CollectionName() string
 }
 
 type C[T col] struct {

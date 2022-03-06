@@ -8,7 +8,7 @@ import (
 
 func (c *C[T]) Insert(document *T, options ...*options.InsertOneOptions) (result *mongo.InsertOneResult, err error) {
 	var i T
-	result, err = c.db.Collection(i.Name()).InsertOne(context.Background(), document, options...)
+	result, err = c.db.Collection(i._CollectionName()).InsertOne(context.Background(), document, options...)
 	return
 }
 
@@ -18,6 +18,6 @@ func (c *C[T]) InsertMany(documents []T, options ...*options.InsertManyOptions) 
 		interfaces = append(interfaces, document)
 	}
 	var i T
-	result, err = c.db.Collection(i.Name()).InsertMany(context.Background(), interfaces, options...)
+	result, err = c.db.Collection(i._CollectionName()).InsertMany(context.Background(), interfaces, options...)
 	return
 }

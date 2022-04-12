@@ -6,6 +6,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func (c *C[T]) InsertCustom(document any, options ...*options.InsertOneOptions) (result *mongo.InsertOneResult, err error) {
+	var i T
+	result, err = c.db.Collection(i.CollectionName()).InsertOne(context.Background(), document, options...)
+	return
+}
+
 func (c *C[T]) Insert(document *T, options ...*options.InsertOneOptions) (result *mongo.InsertOneResult, err error) {
 	var i T
 	result, err = c.db.Collection(i.CollectionName()).InsertOne(context.Background(), document, options...)

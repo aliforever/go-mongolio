@@ -13,3 +13,7 @@ type Account struct {
 func (Account) Name() string {
 	return "accounts"
 }
+
+func (Account) CollectionName() string {
+	return "accounts"
+}

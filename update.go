@@ -3,12 +3,11 @@ package mongorm
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (c *C[T]) UpdateByID(id primitive.ObjectID, data interface{}, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
+func (c *C[T]) UpdateByID(id any, data interface{}, options ...*options.UpdateOptions) (result *mongo.UpdateResult, err error) {
 	var i T
 	result, err = c.db.Collection(i.CollectionName()).UpdateByID(context.Background(), id, bson.M{"$set": data}, options...)
 	return

@@ -18,6 +18,10 @@ func (User) Name() string {
 	return "users"
 }
 
+func (User) CollectionName() string {
+	return "users"
+}
+
 func (u *User) FindAccounts() (acs []Account, err error) {
 	acs, err = Accounts.Find(bson.M{
 		"user_id": u.ID,

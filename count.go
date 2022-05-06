@@ -13,3 +13,11 @@ func (c *C[T]) Count(m bson.M, options ...*options.CountOptions) (result int64, 
 	result, err = c.db.Collection(i.CollectionName()).CountDocuments(context.Background(), m, options...)
 	return
 }
+
+func (c *C[T]) EstimatedCount(options ...*options.EstimatedDocumentCountOptions) (result int64, err error) {
+	var (
+		i T
+	)
+	result, err = c.db.Collection(i.CollectionName()).EstimatedDocumentCount(context.Background(), options...)
+	return
+}

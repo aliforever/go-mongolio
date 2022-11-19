@@ -1,4 +1,4 @@
-module github.com/aliforever/go-mongorm2
+module github.com/aliforever/go-mongolio
 
 go 1.18
 

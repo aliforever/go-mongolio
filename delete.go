@@ -1,4 +1,4 @@
-package mongorm
+package mongolio
 
 import (
 	"context"

@@ -1,7 +1,7 @@
 package main
 
 import (
-	mongorm "github.com/aliforever/go-mongorm2"
+	mongorm "github.com/aliforever/go-mongolio"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

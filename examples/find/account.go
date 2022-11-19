@@ -1,6 +1,6 @@
 package main
 
-import mongorm "github.com/aliforever/go-mongorm2"
+import mongorm "github.com/aliforever/go-mongolio"
 
 var Accounts *mongorm.C[Account]
 

@@ -1,4 +1,4 @@
-package mongorm
+package mongolio
 
 import (
 	"go.mongodb.org/mongo-driver/mongo"

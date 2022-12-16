@@ -7,14 +7,12 @@ import (
 )
 
 func (c *C[T]) InsertCustom(document any, options ...*options.InsertOneOptions) (result *mongo.InsertOneResult, err error) {
-	var i T
-	result, err = c.db.Collection(i.CollectionName()).InsertOne(context.Background(), document, options...)
+	result, err = c.collection.InsertOne(context.Background(), document, options...)
 	return
 }
 
 func (c *C[T]) Insert(document *T, options ...*options.InsertOneOptions) (result *mongo.InsertOneResult, err error) {
-	var i T
-	result, err = c.db.Collection(i.CollectionName()).InsertOne(context.Background(), document, options...)
+	result, err = c.collection.InsertOne(context.Background(), document, options...)
 	return
 }
 
@@ -23,7 +21,6 @@ func (c *C[T]) InsertMany(documents []T, options ...*options.InsertManyOptions) 
 	for _, document := range documents {
 		interfaces = append(interfaces, document)
 	}
-	var i T
-	result, err = c.db.Collection(i.CollectionName()).InsertMany(context.Background(), interfaces, options...)
+	result, err = c.collection.InsertMany(context.Background(), interfaces, options...)
 	return
 }

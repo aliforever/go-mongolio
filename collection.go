@@ -4,16 +4,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type col interface {
-	CollectionName() string
+type C[T any] struct {
+	collection *mongo.Collection
 }
 
-type C[T col] struct {
-	db *mongo.Database
-}
-
-func Collection[T col](db *mongo.Database) *C[T] {
+func Collection[T any](db *mongo.Database, collectionName string) *C[T] {
 	return &C[T]{
-		db: db,
+		collection: db.Collection(collectionName),
 	}
 }

@@ -8,23 +8,20 @@ import (
 )
 
 func (c *C[T]) FindByID(id any, options ...*options.FindOneOptions) (result *T, err error) {
-	var i T
-	err = c.db.Collection(i.CollectionName()).FindOne(context.Background(), bson.M{"_id": id}, options...).Decode(&result)
+	err = c.collection.FindOne(context.Background(), bson.M{"_id": id}, options...).Decode(&result)
 	return
 }
 
 func (c *C[T]) FindOne(m bson.M, options ...*options.FindOneOptions) (result *T, err error) {
-	var i T
-	err = c.db.Collection(i.CollectionName()).FindOne(context.Background(), m, options...).Decode(&result)
+	err = c.collection.FindOne(context.Background(), m, options...).Decode(&result)
 	return
 }
 
 func (c *C[T]) Find(m bson.M, options ...*options.FindOptions) (result []T, err error) {
 	var (
-		i      T
 		cursor *mongo.Cursor
 	)
-	cursor, err = c.db.Collection(i.CollectionName()).Find(context.Background(), m, options...)
+	cursor, err = c.collection.Find(context.Background(), m, options...)
 	if err != nil {
 		return
 	}

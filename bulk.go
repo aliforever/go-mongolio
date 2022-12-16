@@ -7,8 +7,6 @@ import (
 )
 
 func (c *C[T]) BulkImport(models []mongo.WriteModel, options ...*options.BulkWriteOptions) (result *mongo.BulkWriteResult, err error) {
-	var i T
-
-	result, err = c.db.Collection(i.CollectionName()).BulkWrite(context.Background(), models, options...)
+	result, err = c.collection.BulkWrite(context.Background(), models, options...)
 	return
 }

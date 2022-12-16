@@ -12,6 +12,6 @@ func (c *C[T]) UnsetFieldsByID(id any, fieldNames ...string) (result *mongo.Upda
 		m[name] = ""
 	}
 	var i T
-	result, err = c.db.Collection(i.CollectionName()).UpdateByID(context.Background(), id, bson.M{"$unset": m})
+	result, err = c.collection.UpdateByID(context.Background(), id, bson.M{"$unset": m})
 	return
 }

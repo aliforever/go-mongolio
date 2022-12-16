@@ -7,17 +7,11 @@ import (
 )
 
 func (c *C[T]) Count(m bson.M, options ...*options.CountOptions) (result int64, err error) {
-	var (
-		i T
-	)
-	result, err = c.db.Collection(i.CollectionName()).CountDocuments(context.Background(), m, options...)
+	result, err = c.collection.CountDocuments(context.Background(), m, options...)
 	return
 }
 
 func (c *C[T]) EstimatedCount(options ...*options.EstimatedDocumentCountOptions) (result int64, err error) {
-	var (
-		i T
-	)
-	result, err = c.db.Collection(i.CollectionName()).EstimatedDocumentCount(context.Background(), options...)
+	result, err = c.collection.EstimatedDocumentCount(context.Background(), options...)
 	return
 }

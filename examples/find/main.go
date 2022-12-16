@@ -20,8 +20,8 @@ func main() {
 
 	db := client.Database("mydb")
 
-	Users = mongorm.Collection[User](db)
-	Accounts = mongorm.Collection[Account](db)
+	Users = mongorm.Collection[User](db, "users")
+	Accounts = mongorm.Collection[Account](db, "accounts")
 
 	user, err := Users.FindOne(bson.M{"first_name": "Ali"})
 	if err != nil {

@@ -1,8 +1,6 @@
 package mongolio
 
-import (
-	"go.mongodb.org/mongo-driver/mongo"
-)
+import "go.mongodb.org/mongo-driver/v2/mongo"
 
 type C[T any] struct {
 	collection *mongo.Collection

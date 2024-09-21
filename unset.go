@@ -2,8 +2,9 @@ package mongolio
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 func (c *C[T]) UnsetFieldsByID(id any, fieldNames ...string) (result *mongo.UpdateResult, err error) {

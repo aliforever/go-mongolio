@@ -12,7 +12,7 @@ func (c *C[T]) IncrementFieldByID(
 	id any,
 	fieldName string,
 	amount int,
-	opts ...options.Lister[options.UpdateOptions],
+	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	return c.collection.UpdateByID(context.Background(), id, bson.M{"$inc": bson.M{fieldName: amount}}, opts...)
 }
@@ -21,7 +21,7 @@ func (c *C[T]) IncrementFieldByFilter(
 	filter bson.M,
 	fieldName string,
 	amount int,
-	opts ...options.Lister[options.UpdateOptions],
+	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	return c.collection.UpdateOne(context.Background(), filter, bson.M{"$inc": bson.M{fieldName: amount}}, opts...)
 }
@@ -29,7 +29,7 @@ func (c *C[T]) IncrementFieldByFilter(
 func (c *C[T]) IncrementFieldsByID(
 	id any,
 	fieldNameAmount bson.M,
-	opts ...options.Lister[options.UpdateOptions],
+	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	return c.collection.UpdateByID(context.Background(), id, bson.M{"$inc": fieldNameAmount}, opts...)
 }
@@ -37,7 +37,7 @@ func (c *C[T]) IncrementFieldsByID(
 func (c *C[T]) IncrementFieldsByFilter(
 	filter,
 	fieldNameAmount bson.M,
-	opts ...options.Lister[options.UpdateOptions],
+	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	return c.collection.UpdateOne(context.Background(), filter, bson.M{"$inc": fieldNameAmount}, opts...)
 }

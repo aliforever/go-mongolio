@@ -77,7 +77,7 @@ func (c *C[T]) FindOneAndUpdateCustom(
 	err := c.collection.FindOneAndUpdate(
 		context.Background(),
 		filter,
-		update,
+		bson.M{"$set": update},
 		opts...,
 	).Decode(&result)
 

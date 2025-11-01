@@ -122,7 +122,7 @@ func (c *C[T]) UpsertCustom(
 	return c.collection.UpdateOne(
 		context.Background(),
 		filter,
-		update,
+		bson.M{"$set": update},
 		allOpts...,
 	)
 }

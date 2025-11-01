@@ -44,22 +44,26 @@ func (c *C[T]) UpdateCustom(
 	}, opts...)
 }
 
-// UpdateCustomWithMap updates a document with custom operators using a map (no automatic $set wrapping)
+// UpdateCustomWithMap updates a document with custom operators using a map
 func (c *C[T]) UpdateCustomWithMap(
 	filter bson.M,
 	update bson.M,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (result *mongo.UpdateResult, err error) {
-	return c.collection.UpdateOne(context.Background(), filter, update, opts...)
+	return c.collection.UpdateOne(context.Background(), filter, bson.M{
+		"$set": update,
+	}, opts...)
 }
 
-// UpdateCustomOrdered updates a document with custom operators using ordered bson.D (no automatic $set wrapping)
+// UpdateCustomOrdered updates a document with custom operators using ordered bson.D
 func (c *C[T]) UpdateCustomOrdered(
 	filter bson.M,
 	update bson.D,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (result *mongo.UpdateResult, err error) {
-	return c.collection.UpdateOne(context.Background(), filter, update, opts...)
+	return c.collection.UpdateOne(context.Background(), filter, bson.D{
+		{"$set", update},
+	}, opts...)
 }
 
 // UpdateWithMap updates specific fields of a document using a map
@@ -94,22 +98,26 @@ func (c *C[T]) UpdateCustomMany(
 	}, opts...)
 }
 
-// UpdateCustomManyWithMap updates multiple documents with custom operators using a map (no automatic $set wrapping)
+// UpdateCustomManyWithMap updates multiple documents with custom operators using a map
 func (c *C[T]) UpdateCustomManyWithMap(
 	filter bson.M,
 	update bson.M,
 	opts ...options.Lister[options.UpdateManyOptions],
 ) (result *mongo.UpdateResult, err error) {
-	return c.collection.UpdateMany(context.Background(), filter, update, opts...)
+	return c.collection.UpdateMany(context.Background(), filter, bson.M{
+		"$set": update,
+	}, opts...)
 }
 
-// UpdateCustomManyOrdered updates multiple documents with custom operators using ordered bson.D (no automatic $set wrapping)
+// UpdateCustomManyOrdered updates multiple documents with custom operators using ordered bson.D
 func (c *C[T]) UpdateCustomManyOrdered(
 	filter bson.M,
 	update bson.D,
 	opts ...options.Lister[options.UpdateManyOptions],
 ) (result *mongo.UpdateResult, err error) {
-	return c.collection.UpdateMany(context.Background(), filter, update, opts...)
+	return c.collection.UpdateMany(context.Background(), filter, bson.D{
+		{"$set", update},
+	}, opts...)
 }
 
 // UpdateManyWithMap updates specific fields of multiple documents using a map

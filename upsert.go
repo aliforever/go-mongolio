@@ -127,7 +127,7 @@ func (c *C[T]) UpsertCustom(
 	)
 }
 
-// UpsertCustomWithMap updates or inserts with custom update operators using a map (no automatic $set wrapping)
+// UpsertCustomWithMap updates or inserts with custom update operators using a map
 func (c *C[T]) UpsertCustomWithMap(
 	filter bson.M,
 	update bson.M,
@@ -139,12 +139,12 @@ func (c *C[T]) UpsertCustomWithMap(
 	return c.collection.UpdateOne(
 		context.Background(),
 		filter,
-		update,
+		bson.M{"$set": update},
 		allOpts...,
 	)
 }
 
-// UpsertCustomOrdered updates or inserts with custom update operators using ordered bson.D (no automatic $set wrapping)
+// UpsertCustomOrdered updates or inserts with custom update operators using ordered bson.D
 func (c *C[T]) UpsertCustomOrdered(
 	filter bson.M,
 	update bson.D,
@@ -156,7 +156,7 @@ func (c *C[T]) UpsertCustomOrdered(
 	return c.collection.UpdateOne(
 		context.Background(),
 		filter,
-		update,
+		bson.D{{"$set", update}},
 		allOpts...,
 	)
 }

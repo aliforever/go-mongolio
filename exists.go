@@ -21,6 +21,19 @@ func (c *C[T]) Exists(filter bson.M) (bool, error) {
 	return count > 0, nil
 }
 
+// ExistsOrdered checks if any document matching the ordered filter exists
+func (c *C[T]) ExistsOrdered(filter bson.D) (bool, error) {
+	count, err := c.collection.CountDocuments(
+		context.Background(),
+		filter,
+		options.Count().SetLimit(1),
+	)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
 // ExistsByID checks if a document with the given ID exists
 func (c *C[T]) ExistsByID(id any) (bool, error) {
 	return c.Exists(bson.M{"_id": id})
@@ -47,6 +60,19 @@ func (c *C[T]) ExistsWithProjection(filter bson.M, projection bson.M) (*T, bool,
 
 // CountGreaterThan checks if the count of documents matching filter is greater than n
 func (c *C[T]) CountGreaterThan(filter bson.M, n int64) (bool, error) {
+	count, err := c.collection.CountDocuments(
+		context.Background(),
+		filter,
+		options.Count().SetLimit(n+1),
+	)
+	if err != nil {
+		return false, err
+	}
+	return count > n, nil
+}
+
+// CountGreaterThanOrdered checks if the count of documents matching ordered filter is greater than n
+func (c *C[T]) CountGreaterThanOrdered(filter bson.D, n int64) (bool, error) {
 	count, err := c.collection.CountDocuments(
 		context.Background(),
 		filter,

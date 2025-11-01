@@ -10,7 +10,7 @@ import (
 // FindOneAndUpdate finds a document and updates it atomically, returns the document
 func (c *C[T]) FindOneAndUpdate(
 	filter bson.M,
-	update T,
+	update *T,
 	opts ...options.Lister[options.FindOneAndUpdateOptions],
 ) (*T, error) {
 	var result T
@@ -27,10 +27,50 @@ func (c *C[T]) FindOneAndUpdate(
 	return &result, nil
 }
 
+// FindOneAndUpdateWithMap finds a document and updates specific fields atomically using a map
+func (c *C[T]) FindOneAndUpdateWithMap(
+	filter bson.M,
+	update bson.M,
+	opts ...options.Lister[options.FindOneAndUpdateOptions],
+) (*T, error) {
+	var result T
+	err := c.collection.FindOneAndUpdate(
+		context.Background(),
+		filter,
+		bson.M{"$set": update},
+		opts...,
+	).Decode(&result)
+
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// FindOneAndUpdateOrdered finds a document and updates specific fields atomically using ordered bson.D
+func (c *C[T]) FindOneAndUpdateOrdered(
+	filter bson.M,
+	update bson.D,
+	opts ...options.Lister[options.FindOneAndUpdateOptions],
+) (*T, error) {
+	var result T
+	err := c.collection.FindOneAndUpdate(
+		context.Background(),
+		filter,
+		bson.D{{"$set", update}},
+		opts...,
+	).Decode(&result)
+
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 // FindOneAndUpdateCustom finds a document and updates it with custom operators
 func (c *C[T]) FindOneAndUpdateCustom(
 	filter bson.M,
-	update T,
+	update *T,
 	opts ...options.Lister[options.FindOneAndUpdateOptions],
 ) (*T, error) {
 	var result T
@@ -50,7 +90,7 @@ func (c *C[T]) FindOneAndUpdateCustom(
 // FindOneAndUpdateByID finds a document by ID and updates it atomically
 func (c *C[T]) FindOneAndUpdateByID(
 	id any,
-	update T,
+	update *T,
 	opts ...options.Lister[options.FindOneAndUpdateOptions],
 ) (*T, error) {
 	return c.FindOneAndUpdate(bson.M{"_id": id}, update, opts...)
@@ -59,7 +99,7 @@ func (c *C[T]) FindOneAndUpdateByID(
 // FindOneAndReplace finds a document and replaces it atomically
 func (c *C[T]) FindOneAndReplace(
 	filter bson.M,
-	replacement T,
+	replacement *T,
 	opts ...options.Lister[options.FindOneAndReplaceOptions],
 ) (*T, error) {
 	var result T
@@ -79,7 +119,7 @@ func (c *C[T]) FindOneAndReplace(
 // FindOneAndReplaceByID finds a document by ID and replaces it atomically
 func (c *C[T]) FindOneAndReplaceByID(
 	id any,
-	replacement T,
+	replacement *T,
 	opts ...options.Lister[options.FindOneAndReplaceOptions],
 ) (*T, error) {
 	return c.FindOneAndReplace(bson.M{"_id": id}, replacement, opts...)

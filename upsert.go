@@ -11,7 +11,7 @@ import (
 // UpsertByID updates or inserts a document by ID
 func (c *C[T]) UpsertByID(
 	id any,
-	data T,
+	data *T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	upsert := true
@@ -26,10 +26,46 @@ func (c *C[T]) UpsertByID(
 	)
 }
 
+// UpsertByIDWithMap updates or inserts specific fields by ID using a map
+func (c *C[T]) UpsertByIDWithMap(
+	id any,
+	data bson.M,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	upsert := true
+	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	return c.collection.UpdateByID(
+		context.Background(),
+		id,
+		bson.M{"$set": data},
+		allOpts...,
+	)
+}
+
+// UpsertByIDOrdered updates or inserts specific fields by ID using ordered bson.D
+func (c *C[T]) UpsertByIDOrdered(
+	id any,
+	data bson.D,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	upsert := true
+	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	return c.collection.UpdateByID(
+		context.Background(),
+		id,
+		bson.D{{"$set", data}},
+		allOpts...,
+	)
+}
+
 // UpsertOne updates or inserts a document matching the filter
 func (c *C[T]) UpsertOne(
 	filter bson.M,
-	data T,
+	data *T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	upsert := true
@@ -44,10 +80,46 @@ func (c *C[T]) UpsertOne(
 	)
 }
 
+// UpsertWithMap updates or inserts specific fields using a map
+func (c *C[T]) UpsertWithMap(
+	filter bson.M,
+	data bson.M,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	upsert := true
+	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	return c.collection.UpdateOne(
+		context.Background(),
+		filter,
+		bson.M{"$set": data},
+		allOpts...,
+	)
+}
+
+// UpsertOrdered updates or inserts specific fields using ordered bson.D
+func (c *C[T]) UpsertOrdered(
+	filter bson.M,
+	data bson.D,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	upsert := true
+	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	return c.collection.UpdateOne(
+		context.Background(),
+		filter,
+		bson.D{{"$set", data}},
+		allOpts...,
+	)
+}
+
 // UpsertCustom updates or inserts with custom update operators
 func (c *C[T]) UpsertCustom(
 	filter bson.M,
-	update T,
+	update *T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
 	upsert := true

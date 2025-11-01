@@ -18,7 +18,19 @@ func (c *C[T]) DeleteOne(filter bson.M, opts ...options.Lister[options.DeleteOne
 	return
 }
 
+// DeleteOneOrdered deletes a single document using ordered bson.D filter
+func (c *C[T]) DeleteOneOrdered(filter bson.D, opts ...options.Lister[options.DeleteOneOptions]) (result *mongo.DeleteResult, err error) {
+	result, err = c.collection.DeleteOne(context.Background(), filter, opts...)
+	return
+}
+
 func (c *C[T]) DeleteMany(filter bson.M, opts ...options.Lister[options.DeleteManyOptions]) (result *mongo.DeleteResult, err error) {
+	result, err = c.collection.DeleteMany(context.Background(), filter, opts...)
+	return
+}
+
+// DeleteManyOrdered deletes multiple documents using ordered bson.D filter
+func (c *C[T]) DeleteManyOrdered(filter bson.D, opts ...options.Lister[options.DeleteManyOptions]) (result *mongo.DeleteResult, err error) {
 	result, err = c.collection.DeleteMany(context.Background(), filter, opts...)
 	return
 }

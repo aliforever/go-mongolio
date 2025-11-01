@@ -11,7 +11,35 @@ import (
 // ReplaceByID replaces an entire document by ID
 func (c *C[T]) ReplaceByID(
 	id any,
-	replacement T,
+	replacement *T,
+	opts ...options.Lister[options.ReplaceOptions],
+) (*mongo.UpdateResult, error) {
+	return c.collection.ReplaceOne(
+		context.Background(),
+		bson.M{"_id": id},
+		replacement,
+		opts...,
+	)
+}
+
+// ReplaceByIDWithMap replaces an entire document by ID using a map
+func (c *C[T]) ReplaceByIDWithMap(
+	id any,
+	replacement bson.M,
+	opts ...options.Lister[options.ReplaceOptions],
+) (*mongo.UpdateResult, error) {
+	return c.collection.ReplaceOne(
+		context.Background(),
+		bson.M{"_id": id},
+		replacement,
+		opts...,
+	)
+}
+
+// ReplaceByIDOrdered replaces an entire document by ID using ordered bson.D
+func (c *C[T]) ReplaceByIDOrdered(
+	id any,
+	replacement bson.D,
 	opts ...options.Lister[options.ReplaceOptions],
 ) (*mongo.UpdateResult, error) {
 	return c.collection.ReplaceOne(
@@ -25,7 +53,35 @@ func (c *C[T]) ReplaceByID(
 // ReplaceOne replaces an entire document matching the filter
 func (c *C[T]) ReplaceOne(
 	filter bson.M,
-	replacement T,
+	replacement *T,
+	opts ...options.Lister[options.ReplaceOptions],
+) (*mongo.UpdateResult, error) {
+	return c.collection.ReplaceOne(
+		context.Background(),
+		filter,
+		replacement,
+		opts...,
+	)
+}
+
+// ReplaceOneWithMap replaces an entire document using a map
+func (c *C[T]) ReplaceOneWithMap(
+	filter bson.M,
+	replacement bson.M,
+	opts ...options.Lister[options.ReplaceOptions],
+) (*mongo.UpdateResult, error) {
+	return c.collection.ReplaceOne(
+		context.Background(),
+		filter,
+		replacement,
+		opts...,
+	)
+}
+
+// ReplaceOneOrdered replaces an entire document using ordered bson.D
+func (c *C[T]) ReplaceOneOrdered(
+	filter bson.M,
+	replacement bson.D,
 	opts ...options.Lister[options.ReplaceOptions],
 ) (*mongo.UpdateResult, error) {
 	return c.collection.ReplaceOne(

@@ -14,8 +14,7 @@ func (c *C[T]) UpsertByID(
 	data *T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateByID(
@@ -32,8 +31,7 @@ func (c *C[T]) UpsertByIDWithMap(
 	data bson.M,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateByID(
@@ -50,8 +48,7 @@ func (c *C[T]) UpsertByIDOrdered(
 	data bson.D,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateByID(
@@ -68,8 +65,7 @@ func (c *C[T]) UpsertOne(
 	data *T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateOne(
@@ -86,8 +82,7 @@ func (c *C[T]) UpsertWithMap(
 	data bson.M,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateOne(
@@ -104,8 +99,7 @@ func (c *C[T]) UpsertOrdered(
 	data bson.D,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateOne(
@@ -122,8 +116,41 @@ func (c *C[T]) UpsertCustom(
 	update *T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (*mongo.UpdateResult, error) {
-	upsert := true
-	updateOpts := options.UpdateOne().SetUpsert(upsert)
+	updateOpts := options.UpdateOne().SetUpsert(true)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	return c.collection.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+		allOpts...,
+	)
+}
+
+// UpsertCustomWithMap updates or inserts with custom update operators using a map (no automatic $set wrapping)
+func (c *C[T]) UpsertCustomWithMap(
+	filter bson.M,
+	update bson.M,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	updateOpts := options.UpdateOne().SetUpsert(true)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	return c.collection.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+		allOpts...,
+	)
+}
+
+// UpsertCustomOrdered updates or inserts with custom update operators using ordered bson.D (no automatic $set wrapping)
+func (c *C[T]) UpsertCustomOrdered(
+	filter bson.M,
+	update bson.D,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	updateOpts := options.UpdateOne().SetUpsert(true)
 	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
 
 	return c.collection.UpdateOne(

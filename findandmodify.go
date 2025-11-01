@@ -87,6 +87,46 @@ func (c *C[T]) FindOneAndUpdateCustom(
 	return &result, nil
 }
 
+// FindOneAndUpdateCustomWithMap finds a document and updates it with custom operators using a map (no automatic $set wrapping)
+func (c *C[T]) FindOneAndUpdateCustomWithMap(
+	filter bson.M,
+	update bson.M,
+	opts ...options.Lister[options.FindOneAndUpdateOptions],
+) (*T, error) {
+	var result T
+	err := c.collection.FindOneAndUpdate(
+		context.Background(),
+		filter,
+		update,
+		opts...,
+	).Decode(&result)
+
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// FindOneAndUpdateCustomOrdered finds a document and updates it with custom operators using ordered bson.D (no automatic $set wrapping)
+func (c *C[T]) FindOneAndUpdateCustomOrdered(
+	filter bson.M,
+	update bson.D,
+	opts ...options.Lister[options.FindOneAndUpdateOptions],
+) (*T, error) {
+	var result T
+	err := c.collection.FindOneAndUpdate(
+		context.Background(),
+		filter,
+		update,
+		opts...,
+	).Decode(&result)
+
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 // FindOneAndUpdateByID finds a document by ID and updates it atomically
 func (c *C[T]) FindOneAndUpdateByID(
 	id any,

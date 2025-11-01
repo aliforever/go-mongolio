@@ -10,7 +10,7 @@ import (
 
 func (c *C[T]) UpdateByID(
 	id any,
-	data interface{},
+	data T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (result *mongo.UpdateResult, err error) {
 	return c.collection.UpdateByID(context.Background(), id, bson.M{"$set": data}, opts...)
@@ -18,7 +18,7 @@ func (c *C[T]) UpdateByID(
 
 func (c *C[T]) UpdateCustom(
 	filter bson.M,
-	data interface{},
+	data T,
 	opts ...options.Lister[options.UpdateOneOptions],
 ) (result *mongo.UpdateResult, err error) {
 	return c.collection.UpdateOne(context.Background(), filter, bson.M{
@@ -28,7 +28,7 @@ func (c *C[T]) UpdateCustom(
 
 func (c *C[T]) UpdateCustomMany(
 	filter bson.M,
-	data interface{},
+	data T,
 	opts ...options.Lister[options.UpdateManyOptions],
 ) (result *mongo.UpdateResult, err error) {
 	return c.collection.UpdateMany(context.Background(), filter, bson.M{

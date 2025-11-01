@@ -188,7 +188,7 @@ func (c *C[T]) BulkUpsertCustom(
 	for _, model := range models {
 		wm = append(wm, mongo.NewUpdateOneModel().
 			SetFilter(model.Filter).
-			SetUpdate(model.Model).
+			SetUpdate(bson.M{"$set": model.Model}).
 			SetUpsert(true))
 	}
 

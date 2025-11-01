@@ -72,7 +72,7 @@ func (c *C[T]) BulkUpdateCustom(
 	for _, model := range models {
 		wm = append(wm, mongo.NewUpdateOneModel().
 			SetFilter(model.Filter).
-			SetUpdate(model.Model))
+			SetUpdate(bson.M{"$set": model.Model}))
 	}
 
 	return c.collection.BulkWrite(context.Background(), wm, opts...)
@@ -88,7 +88,7 @@ func (c *C[T]) BulkUpdateCustomMany(
 	for _, model := range models {
 		wm = append(wm, mongo.NewUpdateManyModel().
 			SetFilter(model.Filter).
-			SetUpdate(model.Model))
+			SetUpdate(bson.M{"$set": model.Model}))
 	}
 
 	return c.collection.BulkWrite(context.Background(), wm, opts...)

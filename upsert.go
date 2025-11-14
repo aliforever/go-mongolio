@@ -195,6 +195,29 @@ func (c *C[T]) BulkUpsertCustom(
 	return c.collection.BulkWrite(context.Background(), wm, opts...)
 }
 
+// UpsertByIDWithSetOnInsert updates or inserts a document by ID with model for $set and map for $setOnInsert
+func (c *C[T]) UpsertByIDWithSetOnInsert(
+	id any,
+	data *T,
+	setOnInsertData bson.M,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	updateOpts := options.UpdateOne().SetUpsert(true)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	update := bson.M{
+		"$set":         data,
+		"$setOnInsert": setOnInsertData,
+	}
+
+	return c.collection.UpdateByID(
+		context.Background(),
+		id,
+		update,
+		allOpts...,
+	)
+}
+
 // UpsertByIDWithMapAndSetOnInsert updates or inserts specific fields by ID with separate $set and $setOnInsert maps
 func (c *C[T]) UpsertByIDWithMapAndSetOnInsert(
 	id any,
@@ -236,6 +259,29 @@ func (c *C[T]) UpsertByIDOrderedWithSetOnInsert(
 	return c.collection.UpdateByID(
 		context.Background(),
 		id,
+		update,
+		allOpts...,
+	)
+}
+
+// UpsertOneWithSetOnInsert updates or inserts a document with model for $set and map for $setOnInsert
+func (c *C[T]) UpsertOneWithSetOnInsert(
+	filter bson.M,
+	data *T,
+	setOnInsertData bson.M,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	updateOpts := options.UpdateOne().SetUpsert(true)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	update := bson.M{
+		"$set":         data,
+		"$setOnInsert": setOnInsertData,
+	}
+
+	return c.collection.UpdateOne(
+		context.Background(),
+		filter,
 		update,
 		allOpts...,
 	)
@@ -287,6 +333,29 @@ func (c *C[T]) UpsertOrderedWithSetOnInsert(
 	)
 }
 
+// UpsertCustomWithSetOnInsert updates or inserts with model for $set and map for $setOnInsert
+func (c *C[T]) UpsertCustomWithSetOnInsert(
+	filter bson.M,
+	update *T,
+	setOnInsertData bson.M,
+	opts ...options.Lister[options.UpdateOneOptions],
+) (*mongo.UpdateResult, error) {
+	updateOpts := options.UpdateOne().SetUpsert(true)
+	allOpts := append([]options.Lister[options.UpdateOneOptions]{updateOpts}, opts...)
+
+	updateDoc := bson.M{
+		"$set":         update,
+		"$setOnInsert": setOnInsertData,
+	}
+
+	return c.collection.UpdateOne(
+		context.Background(),
+		filter,
+		updateDoc,
+		allOpts...,
+	)
+}
+
 // UpsertCustomWithMapAndSetOnInsert updates or inserts with custom update operators using maps for both $set and $setOnInsert
 func (c *C[T]) UpsertCustomWithMapAndSetOnInsert(
 	filter bson.M,
@@ -333,6 +402,13 @@ func (c *C[T]) UpsertCustomOrderedWithSetOnInsert(
 	)
 }
 
+// UpdateModelWithSetOnInsertGeneric represents a single update operation with model for $set and map for $setOnInsert
+type UpdateModelWithSetOnInsertGeneric[T any] struct {
+	Filter          bson.M
+	Model           T
+	SetOnInsertData bson.M
+}
+
 // UpdateModelWithSetOnInsert represents a single update operation with separate $set and $setOnInsert data using maps
 type UpdateModelWithSetOnInsert struct {
 	Filter          bson.M
@@ -361,6 +437,27 @@ func (c *C[T]) BulkUpsertWithSetOnInsert(
 	return c.collection.BulkWrite(context.Background(), wm, opts...)
 }
 
+// BulkUpsertWithModelAndSetOnInsert performs multiple upsert operations with model for $set and map for $setOnInsert in a single bulk write
+func (c *C[T]) BulkUpsertWithModelAndSetOnInsert(
+	models []UpdateModelWithSetOnInsertGeneric[T],
+	opts ...options.Lister[options.BulkWriteOptions],
+) (*mongo.BulkWriteResult, error) {
+	var wm []mongo.WriteModel
+
+	for _, model := range models {
+		update := bson.M{
+			"$set":         model.Model,
+			"$setOnInsert": model.SetOnInsertData,
+		}
+		wm = append(wm, mongo.NewUpdateOneModel().
+			SetFilter(model.Filter).
+			SetUpdate(update).
+			SetUpsert(true))
+	}
+
+	return c.collection.BulkWrite(context.Background(), wm, opts...)
+}
+
 // BulkUpsertCustomWithSetOnInsert performs multiple custom upsert operations with $setOnInsert in a single bulk write
 func (c *C[T]) BulkUpsertCustomWithSetOnInsert(
 	models []UpdateModelWithSetOnInsert,
@@ -371,6 +468,27 @@ func (c *C[T]) BulkUpsertCustomWithSetOnInsert(
 	for _, model := range models {
 		update := bson.M{
 			"$set":         model.SetData,
+			"$setOnInsert": model.SetOnInsertData,
+		}
+		wm = append(wm, mongo.NewUpdateOneModel().
+			SetFilter(model.Filter).
+			SetUpdate(update).
+			SetUpsert(true))
+	}
+
+	return c.collection.BulkWrite(context.Background(), wm, opts...)
+}
+
+// BulkUpsertCustomWithModelAndSetOnInsert performs multiple custom upsert operations with model for $set and map for $setOnInsert in a single bulk write
+func (c *C[T]) BulkUpsertCustomWithModelAndSetOnInsert(
+	models []UpdateModelWithSetOnInsertGeneric[T],
+	opts ...options.Lister[options.BulkWriteOptions],
+) (*mongo.BulkWriteResult, error) {
+	var wm []mongo.WriteModel
+
+	for _, model := range models {
+		update := bson.M{
+			"$set":         model.Model,
 			"$setOnInsert": model.SetOnInsertData,
 		}
 		wm = append(wm, mongo.NewUpdateOneModel().
